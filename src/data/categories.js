@@ -1,0 +1,18 @@
+export const categories = [
+  { id: 'alimentacao',  name: 'Alimentação',    emoji: '🍽️',  color: '#EF4444', bg: '#FEE2E2', description: 'Restaurantes, lanchonetes, delivery' },
+  { id: 'beleza',       name: 'Beleza',         emoji: '💄',  color: '#EC4899', bg: '#FCE7F3', description: 'Salões, barbearias, estética' },
+  { id: 'saude',        name: 'Saúde',          emoji: '🏥',  color: '#3B82F6', bg: '#DBEAFE', description: 'Clínicas, farmácias, terapias' },
+  { id: 'reparos',      name: 'Reparos',        emoji: '🔧',  color: '#F97316', bg: '#FFEDD5', description: 'Elétrica, hidráulica, pintura' },
+  { id: 'educacao',     name: 'Educação',       emoji: '📚',  color: '#8B5CF6', bg: '#EDE9FE', description: 'Cursos, tutoria, idiomas' },
+  { id: 'tecnologia',   name: 'Tecnologia',     emoji: '💻',  color: '#06B6D4', bg: '#CFFAFE', description: 'TI, assistência técnica' },
+  { id: 'moda',         name: 'Moda',           emoji: '👗',  color: '#A855F7', bg: '#F3E8FF', description: 'Roupas, calçados, acessórios' },
+  { id: 'pets',         name: 'Pets',           emoji: '🐾',  color: '#F59E0B', bg: '#FEF3C7', description: 'Veterinários, pet shops' },
+  { id: 'esportes',     name: 'Esportes',       emoji: '⚽',  color: '#22C55E', bg: '#DCFCE7', description: 'Academias, aulas, esportes' },
+  { id: 'casa',         name: 'Casa & Deco',    emoji: '🏠',  color: '#EA580C', bg: '#FFEDD5', description: 'Móveis, decoração, jardim' },
+  { id: 'eventos',      name: 'Eventos',        emoji: '🎉',  color: '#E11D48', bg: '#FFE4E6', description: 'Festas, buffet, fotografia' },
+  { id: 'juridico',     name: 'Jurídico',       emoji: '⚖️',  color: '#475569', bg: '#F1F5F9', description: 'Advogados, consultorias' },
+  { id: 'transporte',   name: 'Transporte',     emoji: '🚗',  color: '#0EA5E9', bg: '#E0F2FE', description: 'Mecânicas, frete, mototáxi' },
+  { id: 'financeiro',   name: 'Financeiro',     emoji: '💰',  color: '#15803D', bg: '#DCFCE7', description: 'Crédito, câmbio, seguros' },
+  { id: 'religioso',    name: 'Religioso',      emoji: '🙏',  color: '#B45309', bg: '#FEF3C7', description: 'Artigos, igrejas, serviços' },
+  { id: 'arte',         name: 'Arte & Cultura', emoji: '🎨',  color: '#DB2777', bg: '#FCE7F3', description: 'Galerias, ateliês, shows' },
+];

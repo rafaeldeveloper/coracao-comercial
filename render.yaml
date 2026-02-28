@@ -1,0 +1,37 @@
+services:
+  # ── Backend NestJS ──────────────────────────────────────────
+  - type: web
+    name: coracao-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: node dist/main
+    disk:
+      name: sqlite-data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: PORT
+        value: 3000
+      - key: DB_PATH
+        value: /data/coracao.sqlite
+      - key: JWT_SECRET
+        generateValue: true
+    healthCheckPath: /api/categories
+
+  # ── Frontend React ───────────────────────────────────────────
+  - type: web
+    name: coracao-frontend
+    runtime: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: coracao-backend
+          type: web
+          property: host
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
