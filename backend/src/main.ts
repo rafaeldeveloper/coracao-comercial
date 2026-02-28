@@ -16,8 +16,13 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, cb) => {
-      // Permite localhost (dev) e qualquer subdomínio do Render (prod)
-      if (!origin || /localhost/.test(origin) || /\.onrender\.com$/.test(origin)) {
+      if (
+        !origin ||
+        /localhost/.test(origin) ||
+        /\.vercel\.app$/.test(origin) ||
+        /\.railway\.app$/.test(origin) ||
+        /\.up\.railway\.app$/.test(origin)
+      ) {
         cb(null, true);
       } else {
         cb(new Error('Not allowed by CORS'));
