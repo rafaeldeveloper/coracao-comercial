@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { AuthModule } from './auth/auth.module';
 import { BusinessAuthModule } from './business-auth/business-auth.module';
 import { UsersModule } from './users/users.module';
@@ -18,6 +20,10 @@ import { Review } from './reviews/review.entity';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
+    }),
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
       database: process.env.DB_PATH || 'coracao.sqlite',

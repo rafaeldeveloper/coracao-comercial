@@ -42,4 +42,18 @@ export const api = {
   // Avaliações
   getReviews: (businessId) => request('GET', `/businesses/${businessId}/reviews`),
   addReview: (businessId, body) => request('POST', `/businesses/${businessId}/reviews`, body),
+
+  // Upload de logo
+  uploadBusinessLogo: async (businessId, file) => {
+    const formData = new FormData();
+    formData.append('logo', file);
+    const res = await fetch(`${BASE}/businesses/${businessId}/logo`, {
+      method: 'PATCH',
+      headers: authHeader(),
+      body: formData,
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Erro ao enviar logo');
+    return data;
+  },
 };

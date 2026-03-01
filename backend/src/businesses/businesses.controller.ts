@@ -7,9 +7,15 @@ import {
   Body,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
   Request,
   ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname, join } from 'path';
 import { BusinessesService } from './businesses.service';
 import { CreateBusinessDto } from './dto/create-business.dto';
 import { UpdateBusinessDto } from './dto/update-business.dto';
@@ -57,5 +63,28 @@ export class BusinessesController {
     @Request() req: any,
   ) {
     return this.businessesService.update(id, dto, req.user.id);
+  }
+
+  @Patch(':id/logo')
+  @UseGuards(BusinessGuard)
+  @UseInterceptors(FileInterceptor('logo', {
+    storage: diskStorage({
+      destination: join(process.cwd(), 'uploads', 'logos'),
+      filename: (req, file, cb) =>
+        cb(null, `${(req as any).params.id}-${Date.now()}${extname(file.originalname)}`),
+    }),
+    fileFilter: (req, file, cb) => {
+      if (!file.mimetype.match(/image\/(jpg|jpeg|png|gif|webp)/))
+        return cb(new BadRequestException('Apenas imagens são permitidas'), false);
+      cb(null, true);
+    },
+    limits: { fileSize: 2 * 1024 * 1024 },
+  }))
+  uploadLogo(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req: any,
+  ) {
+    return this.businessesService.updateLogo(id, req.user.sub, `/uploads/logos/${file.filename}`);
   }
 }

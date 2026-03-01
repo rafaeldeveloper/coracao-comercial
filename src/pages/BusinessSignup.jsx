@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Store, User, Mail, Lock, Phone, MapPin, ChevronDown } from 'lucide-react';
+import { Store, User, Mail, Lock, Phone, MapPin, ChevronDown, Camera } from 'lucide-react';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
 import { categories } from '../data/categories';
@@ -15,12 +15,22 @@ export default function BusinessSignup() {
   const [step, setStep] = useState(0);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [logoFile, setLogoFile] = useState(null);
+  const [logoPreview, setLogoPreview] = useState(null);
+  const logoInputRef = useRef(null);
   const [form, setForm] = useState({
     businessName: '', category: '', phone: '', address: '', city: '',
     ownerName: '', email: '', password: '',
   });
 
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
+
+  const handleLogoChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setLogoFile(file);
+    setLogoPreview(URL.createObjectURL(file));
+  };
 
   const next = async (e) => {
     e.preventDefault();
@@ -33,6 +43,13 @@ export default function BusinessSignup() {
     try {
       const { token, business } = await api.businessRegister(form);
       localStorage.setItem('coracao_token', token);
+      if (logoFile) {
+        try {
+          await api.uploadBusinessLogo(business.id, logoFile);
+        } catch {
+          // logo upload failure is non-fatal
+        }
+      }
       loginBusiness(business);
       navigate('/dashboard');
     } catch (err) {
@@ -71,6 +88,30 @@ export default function BusinessSignup() {
         <form onSubmit={next} className="space-y-4">
           {step === 0 && (
             <>
+              <div className="flex flex-col items-center gap-3 mb-2">
+                <button
+                  type="button"
+                  onClick={() => logoInputRef.current?.click()}
+                  className="relative w-24 h-24 rounded-full border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center overflow-hidden hover:border-brand-red transition-colors"
+                >
+                  {logoPreview ? (
+                    <img src={logoPreview} alt="preview" className="w-full h-full object-cover" />
+                  ) : (
+                    <Camera size={28} className="text-gray-400" />
+                  )}
+                  <div className="absolute bottom-1 right-1 bg-brand-red rounded-full p-1">
+                    <Camera size={10} className="text-white" />
+                  </div>
+                </button>
+                <p className="text-xs text-gray-400">Logo do negócio (opcional)</p>
+                <input
+                  ref={logoInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleLogoChange}
+                />
+              </div>
               <div>
                 <label className="text-xs font-bold text-gray-600 mb-1.5 block">Nome do negócio *</label>
                 <div className="relative">

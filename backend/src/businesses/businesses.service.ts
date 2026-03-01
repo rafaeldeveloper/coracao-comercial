@@ -83,6 +83,13 @@ export class BusinessesService {
     return this.findOne(id);
   }
 
+  async updateLogo(id: number, ownerId: number, imagePath: string): Promise<Business> {
+    const business = await this.repo.findOne({ where: { id, ownerId } });
+    if (!business) throw new NotFoundException('Negócio não encontrado');
+    business.image = imagePath;
+    return this.parseTags(await this.repo.save(business));
+  }
+
   async updateRating(businessId: number, avgRating: number, count: number) {
     await this.repo.update(businessId, {
       rating: Math.round(avgRating * 10) / 10,
